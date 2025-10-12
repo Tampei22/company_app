@@ -153,7 +153,7 @@ body.light-theme table td {
     color: #3a3a3a !important;
 }
 
-/*ткмная тема */
+/*темная тема */
 body.dark-theme table th {
     background: #242424 !important;
     color: #e8e8e8 !important;
@@ -190,7 +190,7 @@ table tr:nth-child(even) td {
     background: rgba(255,255,255,0.05);
 }
 
-/*внимация таблмц */
+/*внимация таблиц */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }

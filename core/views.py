@@ -153,15 +153,13 @@ def factura_add(request):
             factura = form.save(commit=False)
             contract = factura.contract
 
-            # общая сумма всех существующих накладных по контракту
             total_facturi = (
                 Factura.objects.filter(contract=contract)
                 .aggregate(Sum("suma_facturii"))["suma_facturii__sum"] or 0
             )
             suma_contractului = contract.suma_contractului or 0
             noua_suma = factura.suma_facturii or 0
-
-            # проверка превышения
+            
             if total_facturi + noua_suma > suma_contractului:
                 context = {
                     "form": form,
@@ -176,7 +174,6 @@ def factura_add(request):
             messages.success(request, "Factura a fost adăugată cu succes.")
             return redirect("factura_list")
         else:
-            # форма невалидна, показать ошибки
             return render(request, "core/factura_form.html", {"form": form})
     else:
         form = FacturaForm()
