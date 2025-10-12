@@ -2,6 +2,7 @@
 
 **Структура приложения**
 
+```
 company_app/
 │
 ├── company_app/                # Конфигурация проекта Django
@@ -44,9 +45,12 @@ company_app/
 ├── .gitignore                  
 └── README.md                 
 
+```
 
 **Запуск**
 
+
+```
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
