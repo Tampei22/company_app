@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+{% block title %}Plată{% endblock %}
+
+{% block content %}
+<h2>{% if form.instance.pk %}Redactează plata{% else %}Adaugă plată nouă{% endif %}</h2>
+
+<form method="post" class="styled-form">
+    {% csrf_token %}
+    <table class="form-table">
+        <tr>
+            <td><label for="id_data_platii">Data plății:</label></td>
+            <td>{{ form.data_platii }}</td>
+            <td><label for="id_suma_platita">Suma plătită:</label></td>
+            <td>{{ form.suma_platita }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_metoda">Metoda de plată:</label></td>
+            <td>{{ form.metoda }}</td>
+            <td><label for="id_numar_document">Număr document:</label></td>
+            <td>{{ form.numar_document }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_factura">Factura:</label></td>
+            <td colspan="3">{{ form.factura }}</td>
+        </tr>
+    </table>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvează</button>
+        <a href="{% url 'plata_list' %}" class="btn btn-secondary">Anulare</a>
+    </div>
+</form>
+{% endblock %}

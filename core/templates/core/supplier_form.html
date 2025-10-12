@@ -1,0 +1,93 @@
+{% extends "core/base.html" %}
+{% block title %}Adaugă agent comercial{% endblock %}
+
+{% block content %}
+<h2>Adăugare agent comercial</h2>
+
+<form method="post" class="styled-form">
+    {% csrf_token %}
+
+    <table class="form-table">
+        <tr>
+            <td><label for="id_cod">Cod:</label></td>
+            <td>{{ form.cod }}</td>
+            <td><label for="id_forma_juridica">Forma juridică:</label></td>
+            <td>{{ form.forma_juridica }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_cod_fiscal">Cod fiscal:</label></td>
+            <td>{{ form.cod_fiscal }}</td>
+            <td><label for="id_email">E-mail:</label></td>
+            <td>{{ form.email }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_denumirea">Denumirea instituției:</label></td>
+            <td colspan="3">{{ form.denumirea }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_denumirea_completa">Denumirea completă:</label></td>
+            <td colspan="3">{{ form.denumirea_completa }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_conducator">Conducătorul instituției:</label></td>
+            <td colspan="3">{{ form.conducator }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_adresa_juridica">Adresa juridică:</label></td>
+            <td colspan="3">{{ form.adresa_juridica }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_adresa_postala">Adresa poștală:</label></td>
+            <td colspan="3">{{ form.adresa_postala }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_telefoane">Telefoane:</label></td>
+            <td colspan="3">{{ form.telefoane }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_rezident">Nu este rezident al RM:</label></td>
+            <td>{{ form.rezident }}</td>
+            <td id="tara-label" style="display:none;">Țara:</td>
+            <td id="tara-field" style="display:none;">{{ form.tara }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_cod_tva">Cod TVA:</label></td>
+            <td>{{ form.cod_tva }}</td>
+            <td><label for="id_cont_bancar_iban">Cont bancar IBAN:</label></td>
+            <td>{{ form.cont_bancar_iban }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_contract_baza">Contractul de bază:</label></td>
+            <td colspan="3">{{ form.contract_baza }}</td>
+        </tr>
+    </table>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvează</button>
+        <a href="{% url 'supplier_list' %}" class="btn btn-secondary">Înapoi</a>
+    </div>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const rezidentCheckbox = document.querySelector("#id_rezident");
+    const taraLabel = document.getElementById("tara-label");
+    const taraField = document.getElementById("tara-field");
+
+    function toggleTara() {
+        if (rezidentCheckbox && rezidentCheckbox.checked) {
+            taraLabel.style.display = "";
+            taraField.style.display = "";
+        } else {
+            taraLabel.style.display = "none";
+            taraField.style.display = "none";
+        }
+    }
+
+    if (rezidentCheckbox) {
+        rezidentCheckbox.addEventListener("change", toggleTara);
+        toggleTara();
+    }
+});
+</script>
+{% endblock %}

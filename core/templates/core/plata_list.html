@@ -1,0 +1,44 @@
+{% extends "core/base.html" %}
+{% block title %}Plăți{% endblock %}
+
+{% block content %}
+<h2>Lista plăților</h2>
+
+<a href="{% url 'plata_add' %}" class="btn btn-primary">Adaugă plată</a>
+
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Data</th>
+            <th>Suma</th>
+            <th>Metoda</th>
+            <th>Nr. document</th>
+            <th>Factura</th>
+            <th>Acțiuni</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in plati %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.data_platii }}</td>
+            <td>{{ p.suma_platita }}</td>
+            <td>{{ p.metoda }}</td>
+            <td>{{ p.numar_document }}</td>
+            <td>{{ p.factura.numar }} — {{ p.factura.contract.denumirea }}</td>
+           <td>
+                <a href="{% url 'plata_detail' p.pk %}" class="btn btn-primary">Vizualizare</a>
+                <a href="{% url 'plata_edit' p.pk %}" class="btn btn-edit">Redactează</a>
+                <a href="{% url 'plata_delete' p.pk %}" class="btn btn-danger" onclick="return confirm('Ștergi această plată?')">Șterge</a>
+            </td>
+
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" style="text-align:center; opacity:0.7;">Nici o plată disponibilă</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

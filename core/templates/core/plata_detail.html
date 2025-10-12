@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+{% block title %}Detalii plată{% endblock %}
+
+{% block content %}
+<h2>Detalii plată №{{ plata.id }}</h2>
+
+<table class="form-table" style="width: 70%;">
+    <tr>
+        <td><strong>Data plății:</strong></td>
+        <td>{{ plata.data_platii }}</td>
+    </tr>
+    <tr>
+        <td><strong>Suma plătită:</strong></td>
+        <td>{{ plata.suma_platita }}</td>
+    </tr>
+    <tr>
+        <td><strong>Metoda plății:</strong></td>
+        <td>{{ plata.metoda }}</td>
+    </tr>
+    <tr>
+        <td><strong>Număr document:</strong></td>
+        <td>{{ plata.numar_document }}</td>
+    </tr>
+    <tr>
+        <td><strong>Factura:</strong></td>
+        <td>{{ plata.factura.numar }}</td>
+    </tr>
+    <tr>
+        <td><strong>Contract:</strong></td>
+        <td>{{ plata.factura.contract.denumirea }}</td>
+    </tr>
+</table>
+
+<hr>
+
+<div class="form-actions">
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Print</button>
+    <a href="{% url 'plata_pdf' plata.pk %}" class="btn btn-edit">📄 Export PDF</a>
+    <a href="{% url 'plata_list' %}" class="btn btn-primary">Înapoi</a>
+</div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "core/base.html" %}
+
+{% block title %}Adauga contract{% endblock %}
+
+{% block content %}
+<h2>Crearea contractului</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 800px;">
+
+        <tr>
+            <th colspan="4">Datele instituției</th>
+        </tr>
+        <tr>
+            <td><label for="id_cod">Cod:</label></td>
+            <td>{{ form.cod }}</td>
+            <td><label for="id_denumirea">Denumirea:</label></td>
+            <td>{{ form.denumirea }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_institutia">Instituția:</label></td>
+            <td>{{ form.institutia }}</td>
+            <td><label for="id_programul">Programul:</label></td>
+            <td>{{ form.programul }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_componente_de_sursa">Componente de sursă:</label></td>
+            <td>{{ form.componente_de_sursa }}</td>
+            <td><label for="id_originea_sursei">Originea sursei:</label></td>
+            <td>{{ form.originea_sursei }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_iban">IBAN:</label></td>
+            <td>{{ form.iban }}</td>
+            <td><label for="id_eco">ECO:</label></td>
+            <td>{{ form.eco }}</td>
+        </tr>
+
+        <tr>
+            <th colspan="4">Datele agentului economic</th>
+        </tr>
+        <tr>
+            <td><label for="id_agent">Agent economic:</label></td>
+            <td colspan="3">{{ form.agent }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_contul_de_decontare">Contul de decontare:</label></td>
+            <td colspan="3">{{ form.contul_de_decontare }}</td>
+        </tr>
+
+        <tr>
+            <th colspan="4">Rechizitele contractului</th>
+        </tr>
+        <tr>
+            <td><label for="id_nr_contractului">Nr. contractului:</label></td>
+            <td>{{ form.nr_contractului }}</td>
+            <td><label for="id_data_contractului">Data contractului:</label></td>
+            <td>{{ form.data_contractului }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_conditii_plata">Condiții de plată:</label></td>
+            <td>{{ form.conditii_plata }}</td>
+            <td><label for="id_termen_valabilitate">Termen de valabilitate:</label></td>
+            <td>{{ form.termen_valabilitate }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_suma_contractului">Suma contractului:</label></td>
+            <td>{{ form.suma_contractului }}</td>
+            <td><label for="id_cota_avans">Cota de avans:</label></td>
+            <td>{{ form.cota_avans }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_suma_in_valuta">Suma în valută:</label></td>
+            <td>{{ form.suma_in_valuta }}</td>
+            <td><label for="id_suma_ramasa">Suma rămasă:</label></td>
+            <td>{{ form.suma_ramasa }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_cod_obiectului">Codul obiectului:</label></td>
+            <td>{{ form.cod_obiectului }}</td>
+            <td><label for="id_cod_valutei">Codul valutei:</label></td>
+            <td>{{ form.cod_valutei }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_continut_prescurtat">Conținutul prescurtat:</label></td>
+            <td colspan="3">{{ form.continut_prescurtat }}</td>
+        </tr>
+        <tr>
+            <td><label for="id_data_indeplinirii_obligatiilor">Data îndeplinirii obligațiilor:</label></td>
+            <td>{{ form.data_indeplinirii_obligatiilor }}</td>
+            <td><label for="id_masura">Măsura:</label></td>
+            <td>{{ form.masura }}</td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                {{ form.contractul_nu_este_inregistrat_la_trezorerie }} Contractul nu este înregistrat la trezorerie <br>
+                {{ form.prin_achizitii_publice }} Prin achiziții publice <br>
+                {{ form.contract_produse_alimentare }} Contract produse alimentare pe cantitate
+            </td>
+        </tr>
+    </table>
+
+    <br>
+    <button type="submit" class="btn btn-primary">Salvează</button>
+    <a href="{% url 'contract_list' %}" class="btn btn-secondary">Înapoi</a>
+</form>
+{% endblock %}
+A

@@ -1,0 +1,34 @@
+<!--{% extends "core/base.html" %}
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<h2>Панель управления</h2>
+
+<div class="menu">
+    <a href="{% url 'supplier_list' %}" class="menu-btn">Поставщики</a><br>
+    <a href="{% url 'contract_list' %}" class="menu-btn">Контракты</a><br>
+    <a href="{% url 'factura_list' %}" class="menu-btn">Накладные</a><br>
+    <a href="{% url 'plata_list' %}" class="menu-btn">Платежи</a><br>
+    <a href="{% url 'factura_archive' %}" class="menu-btn">Просмотр выходных накладных</a><br>
+</div>
+
+<style>
+.menu-btn {
+    display: inline-block;
+    margin: 8px 0;
+    padding: 12px 20px;
+    background: #444;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 250px; /* ширина кнопки одинаковая */
+    text-align: center;
+    transition: 0.2s;
+}
+.menu-btn:hover, .menu-btn:focus {
+    background: #666;
+    outline: none;
+}
+</style>
+{% endblock %}

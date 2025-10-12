@@ -1,0 +1,215 @@
+{% extends "core/base.html" %}
+{% block title %}Lista conturilor bancare{% endblock %}
+
+{% block content %}
+<h2>Conturile bancare pentru {{ supplier.denumirea }}</h2>
+
+<a href="{% url 'cont_bancar_add' supplier.pk %}" class="btn btn-primary">Adaugă cont bancar</a>
+
+<table class="styled-table" id="conturi-table">
+    <thead>
+        <tr>
+            <th>Agent economic</th>
+            <th>Denumirea contului</th>
+            <th>IBAN</th>
+            <th>Tip cont</th>
+            <th>Valută</th>
+            <th>Data deschiderii</th>
+            <th>Acțiuni</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cont in conturi %}
+        <tr class="cont-row"
+            data-agent="{{ cont.agent.denumirea }}"
+            data-denumirea="{{ cont.denumirea }}"
+            data-iban="{{ cont.iban }}"
+            data-tip_cont="{{ cont.tip_cont }}"
+            data-valuta="{{ cont.valuta }}"
+            data-prin_trezoreria="{{ cont.prin_trezoreria }}"
+            data-decontari_directe="{{ cont.decontari_directe }}"
+            data-denumirea_trezoreriei="{{ cont.denumirea_trezoreriei }}"
+            data-cod_fiscal_trezorerie="{{ cont.cod_fiscal_trezorerie }}"
+            data-numar_cont_trezorerie="{{ cont.numar_cont_trezorerie }}"
+            data-banca_organizatiei="{{ cont.banca_organizatiei }}"
+            data-banca_corespondent="{{ cont.banca_corespondent }}"
+            data-data_deschiderii="{{ cont.data_deschiderii|date:'Y-m-d' }}"
+            data-data_inchiderii="{{ cont.data_inchiderii|date:'Y-m-d' }}">
+            <td>{{ cont.agent.denumirea }}</td>
+            <td>{{ cont.denumirea }}</td>
+            <td>{{ cont.iban }}</td>
+            <td>{{ cont.tip_cont }}</td>
+            <td>{{ cont.valuta }}</td>
+            <td>{{ cont.data_deschiderii|date:"Y-m-d" }}</td>
+            <td class="actions">
+                <a href="{% url 'cont_bancar_edit' supplier.id cont.pk %}" class="btn btn-edit">Redactează</a>
+                <a href="{% url 'cont_bancar_delete' cont.pk %}" class="btn btn-danger"
+                   onclick="event.stopPropagation(); return confirm('Ștergeți acest cont bancar?')">Șterge</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" style="text-align:center; font-style:italic;">Nici un cont bancar disponibil</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!--модальное окно счетов -->
+<div id="contModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeContModal">&times;</span>
+    <h3>Detalii cont bancar</h3>
+
+    <div class="modal-body">
+      <h4>Informații generale</h4>
+      <p><b>Agent economic:</b> <span id="m_agent"></span></p>
+      <p><b>Denumirea contului:</b> <span id="m_denumirea"></span></p>
+      <p><b>IBAN:</b> <span id="m_iban"></span></p>
+      <p><b>Tip cont:</b> <span id="m_tip_cont"></span></p>
+      <p><b>Valută:</b> <span id="m_valuta"></span></p>
+      <p><b>Prin trezorerie:</b> <span id="m_prin_trezoreria"></span></p>
+      <p><b>Decontări directe:</b> <span id="m_decontari_directe"></span></p>
+
+      <h4>Trezorerie</h4>
+      <p><b>Denumirea trezoreriei:</b> <span id="m_denumirea_trezoreriei"></span></p>
+      <p><b>Cod fiscal trezorerie:</b> <span id="m_cod_fiscal_trezorerie"></span></p>
+      <p><b>Număr cont trezorerie:</b> <span id="m_numar_cont_trezorerie"></span></p>
+
+      <h4>Banca</h4>
+      <p><b>Banca organizației:</b> <span id="m_banca_organizatiei"></span></p>
+      <p><b>Banca corespondent:</b> <span id="m_banca_corespondent"></span></p>
+
+      <h4>Date</h4>
+      <p><b>Data deschiderii:</b> <span id="m_data_deschiderii"></span></p>
+      <p><b>Data închiderii:</b> <span id="m_data_inchiderii"></span></p>
+    </div>
+  </div>
+</div>
+
+<!--  css-->
+<style>
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* ==== ОСНОВНОЙ КОНТЕЙНЕР ==== */
+.modal-content {
+  background-color: #fff;
+  color: #000;
+  border-radius: 12px;
+  padding: 25px 35px;
+  width: 600px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ==== ТЁМНАЯ ТЕМА ==== */
+.dark-theme .modal {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.dark-theme .modal-content {
+  background-color: #121212;
+  color: #f1f1f1;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.05);
+}
+
+/* ==== СВЕТЛАЯ ТЕМА ==== */
+.light-theme .modal {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.light-theme .modal-content {
+  background-color: #fefefe;
+  color: #000;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ==== КНОПКА ЗАКРЫТИЯ ==== */
+.close-btn {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.2s;
+}
+.close-btn:hover {
+  color: #1db954;
+}
+
+/* ==== СЕТКА ВНУТРИ ==== */
+.modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 20px;
+}
+.modal-grid p {
+  margin: 0;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(100,100,100,0.2);
+}
+
+/* ==== ЗАГОЛОВКИ И СЕКЦИИ ==== */
+.modal-section {
+  margin-bottom: 20px;
+}
+.modal-section h4 {
+  margin-bottom: 10px;
+  color: #1db954;
+}
+</style>
+
+
+<!--js-->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("✅ Bank accounts modal script loaded!");
+
+  const rows = document.querySelectorAll('.cont-row');
+  const modal = document.getElementById('contModal');
+  const closeBtn = document.getElementById('closeContModal');
+
+  const yesNo = v => (v === "True" || v === "true" || v === "1") ? "Da" : "Nu";
+
+  rows.forEach(row => {
+    row.addEventListener('click', function(e) {
+      if (e.target.closest('.btn')) return;
+
+      document.getElementById('m_agent').textContent = this.dataset.agent || "—";
+      document.getElementById('m_denumirea').textContent = this.dataset.denumirea || "—";
+      document.getElementById('m_iban').textContent = this.dataset.iban || "—";
+      document.getElementById('m_tip_cont').textContent = this.dataset.tip_cont || "—";
+      document.getElementById('m_valuta').textContent = this.dataset.valuta || "—";
+      document.getElementById('m_prin_trezoreria').textContent = yesNo(this.dataset.prin_trezoreria);
+      document.getElementById('m_decontari_directe').textContent = yesNo(this.dataset.decontari_directe);
+
+      document.getElementById('m_denumirea_trezoreriei').textContent = this.dataset.denumirea_trezoreriei || "—";
+      document.getElementById('m_cod_fiscal_trezorerie').textContent = this.dataset.cod_fiscal_trezorerie || "—";
+      document.getElementById('m_numar_cont_trezorerie').textContent = this.dataset.numar_cont_trezorerie || "—";
+
+      document.getElementById('m_banca_organizatiei').textContent = this.dataset.banca_organizatiei || "—";
+      document.getElementById('m_banca_corespondent').textContent = this.dataset.banca_corespondent || "—";
+      document.getElementById('m_data_deschiderii').textContent = this.dataset.data_deschiderii || "—";
+      document.getElementById('m_data_inchiderii').textContent = this.dataset.data_inchiderii || "—";
+
+      modal.style.display = 'flex';
+    });
+  });
+
+  closeBtn.addEventListener('click', () => modal.style.display = 'none');
+  window.addEventListener('click', e => {
+    if (e.target === modal) modal.style.display = 'none';
+  });
+});
+</script>
+{% endblock %}

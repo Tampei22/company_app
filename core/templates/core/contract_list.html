@@ -1,0 +1,283 @@
+{% extends "core/base.html" %}
+{% block title %}Lista contractelor{% endblock %}
+
+{% block content %}
+<h2>Lista contractelor</h2>
+
+<a href="{% url 'contract_add' %}" class="btn btn-primary">Adaugă contract</a>
+<div class="table-wrapper">
+<table class="styled-table" id="contracts-table">
+    <thead>
+  <tr>
+    <th>Cod</th>
+    <th>Denumirea</th>
+    <th>Nr. contractului</th>
+    <th>Data contractului</th>
+    <th>ECO</th>
+    <th>Termen de valabilitate</th>
+    <th>Instituția</th>
+    <th>Suma contractului</th>
+    <th>Agent economic</th>
+    <th>Conținutul</th>
+    <th>Contul de decontare</th>
+    <th>Programul</th>
+    <th>Acțiuni</th>
+  </tr>
+</thead>
+<tbody>
+  {% for c in contracts %}
+  <tr class="contract-row"
+      data-cod="{{ c.cod }}"
+      data-denumirea="{{ c.denumirea }}"
+      data-nr="{{ c.nr_contractului }}"
+      data-data="{{ c.data_contractului|date:'Y-m-d' }}"
+      data-eco="{{ c.eco }}"
+      data-termen="{{ c.termen_valabilitate|date:'Y-m-d' }}"
+      data-institutie="{{ c.institutia }}"
+      data-suma="{{ c.suma_contractului }}"
+      data-agent="{{ c.agent.denumirea }}"
+      data-cont="{{ c.contul_de_decontare }}"
+      data-program="{{ c.programul }}"
+      data-continut="{{ c.continut_prescurtat|escapejs }}"
+   
+      data-componente_de_sursa="{{ c.componente_de_sursa }}"
+      data-originea_sursei="{{ c.originea_sursei }}"
+      data-iban="{{ c.iban }}"
+      data-conditii_plata="{{ c.conditii_plata }}"
+      data-cota_avans="{{ c.cota_avans }}"
+      data-suma_in_valuta="{{ c.suma_in_valuta }}"
+      data-suma_ramasa="{{ c.suma_ramasa }}"
+      data-cod_obiectului="{{ c.cod_obiectului }}"
+      data-cod_valutei="{{ c.cod_valutei }}"
+      data-data_indeplinirii_obligatiilor="{{ c.data_indeplinirii_obligatiilor|date:'Y-m-d' }}"
+      data-masura="{{ c.masura }}"
+      data-contractul_nu_este_inregistrat_la_trezorerie="{{ c.contractul_nu_este_inregistrat_la_trezorerie }}"
+      data-prin_achizitii_publice="{{ c.prin_achizitii_publice }}"
+      data-contract_produse_alimentare="{{ c.contract_produse_alimentare }}">
+
+    <td>{{ c.cod }}</td>
+    <td>{{ c.denumirea }}</td>
+    <td>{{ c.nr_contractului }}</td>
+    <td>{{ c.data_contractului|date:"Y-m-d" }}</td>
+    <td>{{ c.eco }}</td>
+    <td>{{ c.termen_valabilitate|date:"Y-m-d" }}</td>
+    <td>{{ c.institutia }}</td>
+    <td>{{ c.suma_contractului }}</td>
+    <td>{{ c.agent.denumirea }}</td>
+    <td class="col-continut">{{ c.continut_prescurtat }}</td>
+    <td>{{ c.contul_de_decontare }}</td>
+    <td>{{ c.programul }}</td>
+    <td class="actions">
+      <a href="{% url 'contract_edit' c.pk %}" class="btn btn-edit" onclick="event.stopPropagation()">Redactează</a>
+      <a href="{% url 'contract_delete' c.pk %}" class="btn btn-danger" onclick="event.stopPropagation(); return confirm('Ștergeți acest contract?')">Șterge</a>
+    </td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="13" style="text-align:center; font-style:italic;">Nici un contract disponibil</td></tr>
+  {% endfor %}
+</tbody>
+
+
+</table>
+</div>
+
+<!--модальное окно контрактов-->
+<div id="contractModal" class="modal">
+  <div class="modal-content compact">
+    <span class="close-btn" id="closeModal">&times;</span>
+    <h3>Detalii contract</h3>
+
+    <div class="modal-body">
+
+      <div class="modal-section">
+        <h4>Informații generale</h4>
+        <div class="modal-grid">
+          <p><b>Cod:</b> <span id="m_cod"></span></p>
+          <p><b>Denumirea:</b> <span id="m_denumirea"></span></p>
+          <p><b>Instituția:</b> <span id="m_institutia"></span></p>
+          <p><b>Programul:</b> <span id="m_programul"></span></p>
+          <p><b>Componente de sursă:</b> <span id="m_componente_de_sursa"></span></p>
+          <p><b>Originea sursei:</b> <span id="m_originea_sursei"></span></p>
+          <p><b>IBAN:</b> <span id="m_iban"></span></p>
+          <p><b>ECO:</b> <span id="m_eco"></span></p>
+          <p><b>Agent economic:</b> <span id="m_agent"></span></p>
+          <p><b>Contul de decontare:</b> <span id="m_contul_de_decontare"></span></p>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <h4>Informații financiare</h4>
+        <div class="modal-grid">
+          <p><b>Nr. contractului:</b> <span id="m_nr_contractului"></span></p>
+          <p><b>Data contractului:</b> <span id="m_data_contractului"></span></p>
+          <p><b>Condiții de plată:</b> <span id="m_conditii_plata"></span></p>
+          <p><b>Termen de valabilitate:</b> <span id="m_termen_valabilitate"></span></p>
+          <p><b>Suma contractului:</b> <span id="m_suma_contractului"></span></p>
+          <p><b>Cota avans:</b> <span id="m_cota_avans"></span></p>
+          <p><b>Suma în valută:</b> <span id="m_suma_in_valuta"></span></p>
+          <p><b>Suma rămasă:</b> <span id="m_suma_ramasa"></span></p>
+          <p><b>Cod obiectului:</b> <span id="m_cod_obiectului"></span></p>
+          <p><b>Cod valutei:</b> <span id="m_cod_valutei"></span></p>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <h4>Alte informații</h4>
+        <div class="modal-grid">
+          <p class="span-2"><b>Conținut prescurtat:</b> <span id="m_continut_prescurtat"></span></p>
+          <p><b>Data îndeplinirii obligațiilor:</b> <span id="m_data_indeplinirii_obligatiilor"></span></p>
+          <p><b>Măsura:</b> <span id="m_masura"></span></p>
+          <p><b>Înregistrat la trezorerie:</b> <span id="m_contractul_nu_este_inregistrat_la_trezorerie"></span></p>
+          <p><b>Prin achiziții publice:</b> <span id="m_prin_achizitii_publice"></span></p>
+          <p><b>Contract produse alimentare:</b> <span id="m_contract_produse_alimentare"></span></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--css-->
+<style>
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* ==== ОСНОВНОЙ КОНТЕЙНЕР ==== */
+.modal-content {
+  background-color: #fff;
+  color: #000;
+  border-radius: 12px;
+  padding: 25px 35px;
+  width: 600px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ==== ТЁМНАЯ ТЕМА ==== */
+.dark-theme .modal {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.dark-theme .modal-content {
+  background-color: #121212;
+  color: #f1f1f1;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.05);
+}
+
+/* ==== СВЕТЛАЯ ТЕМА ==== */
+.light-theme .modal {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.light-theme .modal-content {
+  background-color: #fefefe;
+  color: #000;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ==== КНОПКА ЗАКРЫТИЯ ==== */
+.close-btn {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.2s;
+}
+.close-btn:hover {
+  color: #1db954;
+}
+
+/* ==== СЕТКА ВНУТРИ ==== */
+.modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 20px;
+}
+.modal-grid p {
+  margin: 0;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(100,100,100,0.2);
+}
+
+/* ==== ЗАГОЛОВКИ И СЕКЦИИ ==== */
+.modal-section {
+  margin-bottom: 20px;
+}
+.modal-section h4 {
+  margin-bottom: 10px;
+  color: #1db954;
+}
+</style>
+
+
+<!-- js-->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("✅ Script loaded!");
+
+  const rows = document.querySelectorAll('.contract-row');
+  const modal = document.getElementById('contractModal');
+  const closeModalBtn = document.getElementById('closeModal');
+
+  const money = v => (v === null || v === "" || isNaN(v)) ? "—" :
+      Number(v).toLocaleString("ro-RO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const yesNo = v => (v === "True" || v === "true" || v === "1") ? "Da" : "Nu";
+
+  rows.forEach(row => {
+    row.addEventListener('click', function(e) {
+      if (e.target.closest('.btn')) return; 
+
+      // informatii generale
+      document.getElementById('m_cod').textContent = this.dataset.cod || "—";
+      document.getElementById('m_denumirea').textContent = this.dataset.denumirea || "—";
+      document.getElementById('m_institutia').textContent = this.dataset.institutie || "—";
+      document.getElementById('m_programul').textContent = this.dataset.program || "—";
+      document.getElementById('m_componente_de_sursa').textContent = this.dataset.componente_de_sursa || "—";
+      document.getElementById('m_originea_sursei').textContent = this.dataset.originea_sursei || "—";
+      document.getElementById('m_iban').textContent = this.dataset.iban || "—";
+      document.getElementById('m_eco').textContent = this.dataset.eco || "—";
+      document.getElementById('m_agent').textContent = this.dataset.agent || "—";
+      document.getElementById('m_contul_de_decontare').textContent = this.dataset.cont || "—";
+
+      //financiare
+      document.getElementById('m_nr_contractului').textContent = this.dataset.nr || "—";
+      document.getElementById('m_data_contractului').textContent = this.dataset.data || "—";
+      document.getElementById('m_conditii_plata').textContent = this.dataset.conditii_plata || "—";
+      document.getElementById('m_termen_valabilitate').textContent = this.dataset.termen || "—";
+      document.getElementById('m_suma_contractului').textContent = money(this.dataset.suma);
+      document.getElementById('m_cota_avans').textContent = money(this.dataset.cota_avans);
+      document.getElementById('m_suma_in_valuta').textContent = money(this.dataset.suma_in_valuta);
+      document.getElementById('m_suma_ramasa').textContent = money(this.dataset.suma_ramasa);
+      document.getElementById('m_cod_obiectului').textContent = this.dataset.cod_obiectului || "—";
+      document.getElementById('m_cod_valutei').textContent = this.dataset.cod_valutei || "—";
+
+      //alte
+      document.getElementById('m_continut_prescurtat').textContent = this.dataset.continut || "—";
+      document.getElementById('m_data_indeplinirii_obligatiilor').textContent = this.dataset.data_indeplinirii_obligatiilor || "—";
+      document.getElementById('m_masura').textContent = this.dataset.masura || "—";
+      document.getElementById('m_contractul_nu_este_inregistrat_la_trezorerie').textContent = yesNo(this.dataset.contractul_nu_este_inregistrat_la_trezorerie);
+      document.getElementById('m_prin_achizitii_publice').textContent = yesNo(this.dataset.prin_achizitii_publice);
+      document.getElementById('m_contract_produse_alimentare').textContent = yesNo(this.dataset.contract_produse_alimentare);
+
+      modal.style.display = 'flex';
+    });
+  });
+
+  //закрытие окна 
+  closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
+  window.addEventListener('click', e => {
+    if (e.target === modal) modal.style.display = 'none';
+  });
+});
+</script>
+{% endblock %}

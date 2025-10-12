@@ -1,0 +1,30 @@
+<!-- {% extends "core/base.html" %}
+
+{% block content %}
+<h2>Отчёт по платежам</h2>
+
+<table border="1" cellpadding="5">
+  <tr>
+    <th>ID</th>
+    <th>Дата</th>
+    <th>Сумма</th>
+    <th>Метод</th>
+    <th>Документ</th>
+    <th>Накладная</th>
+    <th>Контракт</th>
+  </tr>
+  {% for p in plati %}
+  <tr>
+    <td>{{ p.id }}</td>
+    <td>{{ p.data_platii }}</td>
+    <td>{{ p.suma_platita }}</td>
+    <td>{{ p.metoda }}</td>
+    <td>{{ p.numar_document }}</td>
+    <td>{{ p.factura.numar }}</td>
+    <td>{{ p.factura.contract.denumirea }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<a href="{% url 'plata_list' %}">Назад к платежам</a>
+{% endblock %}

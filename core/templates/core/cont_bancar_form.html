@@ -1,0 +1,74 @@
+{% extends "core/base.html" %}
+{% block title %}{{ form.instance.pk|yesno:"Redactează cont bancar,Adaugă cont bancar" }}{% endblock %}
+
+{% block content %}
+<h2>{% if form.instance.pk %}Redactează cont bancar{% else %}Adaugă cont bancar{% endif %}</h2>
+
+<form method="post"
+      action="{% if form.instance.pk %}
+                 {% url 'cont_bancar_edit' supplier.pk form.instance.pk %}
+               {% else %}
+                 {% url 'cont_bancar_add' supplier.pk %}
+               {% endif %}"
+      class="styled-form">
+  {% csrf_token %}
+
+  <table class="form-table">
+    <tbody>
+      <tr>
+        <td><label for="{{ form.denumirea.id_for_label }}">Denumirea contului:</label></td>
+        <td>{{ form.denumirea }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.iban.id_for_label }}">IBAN:</label></td>
+        <td>{{ form.iban }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.tip_cont.id_for_label }}">Tip cont:</label></td>
+        <td>{{ form.tip_cont }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.valuta.id_for_label }}">Valută:</label></td>
+        <td>{{ form.valuta }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.banca_organizatiei.id_for_label }}">Banca organizației:</label></td>
+        <td>{{ form.banca_organizatiei }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.banca_corespondent.id_for_label }}">Banca corespondent:</label></td>
+        <td>{{ form.banca_corespondent }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.data_deschiderii.id_for_label }}">Data deschiderii:</label></td>
+        <td>{{ form.data_deschiderii }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.data_inchiderii.id_for_label }}">Data închiderii:</label></td>
+        <td>{{ form.data_inchiderii }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.cod_fiscal_trezorerie.id_for_label }}">Cod fiscal trezorerie:</label></td>
+        <td>{{ form.cod_fiscal_trezorerie }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.denumirea_trezoreriei.id_for_label }}">Denumirea trezoreriei:</label></td>
+        <td>{{ form.denumirea_trezoreriei }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.numar_cont_trezorerie.id_for_label }}">Nr. cont trezorerie:</label></td>
+        <td>{{ form.numar_cont_trezorerie }}</td>
+      </tr>
+      <tr>
+        <td><label for="{{ form.decontari_directe.id_for_label }}">Decontări directe:</label></td>
+        <td>{{ form.decontari_directe }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Salvează</button>
+    <a href="{% url 'cont_bancar_list' supplier.pk %}" class="btn btn-secondary">Anulare</a>
+  </div>
+</form>
+{% endblock %}

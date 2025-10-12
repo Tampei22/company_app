@@ -1,0 +1,62 @@
+{% extends "core/base.html" %}
+{% block title %}Arhiva facturilor{% endblock %}
+
+{% block content %}
+<h2>Arhiva facturilor emise</h2>
+
+<form method="get" class="styled-form">
+    <table class="form-table" style="width: 70%;">
+        <tr>
+            <td><label>Data:</label></td>
+            <td>
+                <input type="text" name="data" placeholder="YYYY-MM-DD sau >YYYY-MM-DD"
+                       value="{{ request.GET.data }}">
+            </td>
+        </tr>
+        <tr>
+            <td><label>Expeditor:</label></td>
+            <td><input type="text" name="otpravitel" value="{{ request.GET.otpravitel }}"></td>
+        </tr>
+        <tr>
+            <td><label>Destinatar:</label></td>
+            <td><input type="text" name="poluchatel" value="{{ request.GET.poluchatel }}"></td>
+        </tr>
+        <tr>
+            <td><label>Număr factură:</label></td>
+            <td><input type="text" name="numar" value="{{ request.GET.numar }}"></td>
+        </tr>
+    </table>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">🔍 Filtru</button>
+        <a href="{% url 'factura_archive' %}" class="btn btn-secondary">Resetează</a>
+    </div>
+</form>
+
+<hr>
+
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Expeditor</th>
+            <th>Destinatar</th>
+            <th>Număr factură</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for f in facturi %}
+        <tr>
+            <td>{{ f.data_facturii }}</td>
+            <td>{{ f.contract.institutie }}</td>
+            <td>{{ f.contract.denumirea }}</td>
+            <td>{{ f.numar }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align:center; opacity:0.7;">Nici o factură disponibilă</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

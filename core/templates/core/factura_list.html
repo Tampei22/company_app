@@ -1,0 +1,46 @@
+{% extends "core/base.html" %}
+{% block title %}Facturi{% endblock %}
+
+{% block content %}
+<h2>Lista facturilor</h2>
+
+<a href="{% url 'factura_add' %}" class="btn btn-primary">Adaugă factură</a>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Număr</th>
+      <th>Data</th>
+      <th>Suma</th>
+      <th>Contract</th>
+      <th>Acțiuni</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for f in facturi %}
+    <tr>
+      <td>{{ f.id }}</td>
+      <td>{{ f.numar }}</td>
+      <td>{{ f.data_facturii|date:"Y-m-d" }}</td>
+      <td>{{ f.suma_facturii }}</td>
+      <td>{{ f.contract.cod }} — {{ f.contract.denumirea }}</td>
+      <td class="actions">
+        <a href="{% url 'factura_edit' f.pk %}" class="btn btn-edit">Redactează</a>
+        <a href="{% url 'factura_delete' f.pk %}" class="btn btn-danger" onclick="return confirm('Ștergeți factura?')">Șterge</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="6" style="text-align:center;">Nicio factură disponibilă</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="total-sum">
+  <strong>Suma totală a facturilor:</strong>
+  <span>{{ total_sum }}</span>
+</div>
+
+{% endblock %}

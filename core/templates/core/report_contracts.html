@@ -1,0 +1,26 @@
+<!--{% extends "core/base.html" %}
+
+{% block content %}
+<h2>Отчёт по контрактам</h2>
+
+<table border="1" cellpadding="5">
+  <tr>
+    <th>Код</th>
+    <th>Название</th>
+    <th>Дата</th>
+    <th>Срок действия</th>
+    <th>Сумма</th>
+    <th>Поставщик</th>
+  </tr>
+  {% for c in contracts %}
+  <tr>
+    <td>{{ c.cod }}</td>
+    <td>{{ c.denumirea }}</td>
+    <td>{{ c.data }}</td>
+    <td>{{ c.termen_valabilitate }}</td>
+    <td>{{ c.suma_contractului }}</td>
+    <td>{{ c.agent.denumirea }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

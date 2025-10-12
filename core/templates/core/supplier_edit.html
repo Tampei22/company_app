@@ -1,0 +1,40 @@
+<!-- {% extends "core/base.html" %}
+{% block title %}Redactează agentul economic{% endblock %}
+{% block content %}
+
+<h2>Redactarea datelor</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvează</button>
+</form>
+
+<hr>
+<h3>Conturi bancare</h3>
+<a href="{% url 'cont_bancar_add' supplier.id %}">Adaugă cont</a>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Denumirea</th>
+        <th>IBAN</th>
+        <th>Tip de cont</th>
+        <th>Valuta</th>
+        <th>Acțiuni</th>
+    </tr>
+    {% for cont in supplier.conturi_bancare.all %}
+    <tr>
+        <td>{{ cont.denumirea }}</td>
+        <td>{{ cont.iban }}</td>
+        <td>{{ cont.tip_cont }}</td>
+        <td>{{ cont.valuta }}</td>
+        <td>
+            <a href="{% url 'cont_bancar_delete' cont.id %}">Șterge</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">Niciun cont bancar disponibl</td></tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
