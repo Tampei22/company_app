@@ -18,7 +18,7 @@
 
 <body class="light-theme">
 
-    {% if request.user.is_authenticated %}
+   {% if not request.path == '/conturi/login/' %}
 
     <div class="sidebar">
         <h2>Company</h2>
